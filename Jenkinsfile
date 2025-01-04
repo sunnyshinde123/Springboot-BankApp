@@ -1,30 +1,31 @@
-@Library("shared-library@DevOps") _
-
 pipeline {
     agent any;
-
-    stages {
-        stage('Checkout code') {
-            steps {
-                codeCheckout('DevOps', 'https://github.com/joakim077/Springboot-BankApp.git')
-            }
-        }
-        stage('build') {
-            steps {
-                buildImage("springboot-application")
-            }
-        }
-        stage('Push Image') {
-            steps {
-                pushImage("springboot-application")
-            }
-        }
-        stage('Deploy'){
+    
+    
+    stages{
+        stage("Clone Code"){
             steps{
-                deploy()
+                git url: "https://github.com/sunnyshinde123/Springboot-BankApp.git", branch: "${BRANCH_NAME}"
             }
         }
         
+        stage("Test the Code"){
+            steps{
+                echo "Test completed"
+            }
+        }
+        
+        stage("Build Application"){
+            steps{
+                sh "docker build -t bankapp:latest ."
+            }
+        }
+        
+        stage("Deploy Application"){
+            steps{
+                sh "docker compose up -d"
+            }
+        }
     }
 }
 
