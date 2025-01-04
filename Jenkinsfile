@@ -1,7 +1,7 @@
 @Library("shared-library@DevOps") _
 
 pipeline {
-    agent {label 'runner_1'}
+    agent any;
 
     stages {
         stage('Checkout code') {
