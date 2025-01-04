@@ -1,0 +1,43 @@
+stages:
+  - build
+  - test
+  - push
+  - deploy
+
+build_job:
+  stage: build
+  script:
+    - docker build -t bankapp-mini:latest .
+    - echo "Image build successfully"
+  tags:
+    - stg
+
+test_job:
+  stage: test
+  script:
+    - echo "No Any Test Specified By Developer"
+  tags:
+    - stg
+
+push_job:
+  stage: push
+  script:
+    - echo "Tagging Docker image..."
+    - docker image tag "bankapp-mini:latest" "$dockerUser/bankapp-mini:latest"
+    - echo "Logging to Docker Hub"
+    - echo "$dockerPass" | docker login --username "$dockerUser" --password-stdin
+    - echo "Pushing Docker image to Docker Hub"
+    - docker push "$dockerUser/bankapp-mini:latest"
+    - echo "Image pushed successfully Done"
+  tags:
+    - stg
+
+deploy_job:
+  stage: deploy
+  script:
+    - docker compose down
+    - docker compose up -d
+    - echo "Application Running Successfully"
+  tags:
+    - stg
+
