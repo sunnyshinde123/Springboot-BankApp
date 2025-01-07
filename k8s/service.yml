@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bankapp-service
+  namespace: bankapp
+  labels:
+    app: bankapp-dev
+spec:
+  type: NodePort
+  selector:
+    app: bankapp-dev
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30080 # Exposes the app on this port of the host
